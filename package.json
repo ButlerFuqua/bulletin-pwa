@@ -7,13 +7,13 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "vercel": "vercel dev"
+    "v": "vercel dev"
   },
   "dependencies": {
     "@nuxt/content": "^1.15.1",
     "@nuxt/postcss8": "^1.1.3",
     "autoprefixer": "^10.4.12",
-    "axios": "^1.1.2",
+    "axios": "^1.1.3",
     "core-js": "^3.19.3",
     "dotenv": "^16.0.3",
     "nuxt": "^2.15.8",
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@nuxt/types": "^2.15.8",
     "@nuxt/typescript-build": "^2.1.0",
+    "@nuxtjs/supabase": "^0.2.2",
     "@nuxtjs/tailwindcss": "^4.2.1",
     "add": "^2.0.6",
     "node-html-markdown": "^1.2.0",
