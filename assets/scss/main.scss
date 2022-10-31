@@ -1,0 +1,48 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#__nuxt,
+#__layout {
+    height: 100%;
+}
+
+#showNotes {
+    h1 {
+        font-size: 3rem;
+    }
+
+    p {
+        line-height: 2rem;
+        margin: 1rem inherit;
+    }
+
+    a {
+        color: rgb(37 99 235); // blue-600
+
+        &:hover {
+            color: rgb(59 130 246); // blue-500
+        }
+
+        &:visited {
+            color: coral;
+
+            &:hover {
+                color: rgb(251 191 36); // amber-400
+            }
+        }
+
+        transition: all .3s;
+    }
+
+    ul,
+    ol {
+        padding-left: 1rem;
+    }
+
+    li {
+        list-style: disc;
+    }
+}
