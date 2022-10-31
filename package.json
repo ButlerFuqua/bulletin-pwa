@@ -1,14 +1,12 @@
 {
-  "name": "hey-buddy-podcast",
+  "name": "testimony-blog",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate",
-    "n": "netlify dev",
-    "podcast": "node build-podcast-content.js"
+    "generate": "nuxt generate"
   },
   "dependencies": {
     "@nuxt/content": "^1.15.1",
