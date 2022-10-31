@@ -6,7 +6,8 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate"
+    "generate": "nuxt generate",
+    "vercel": "vercel dev"
   },
   "dependencies": {
     "@nuxt/content": "^1.15.1",
@@ -30,6 +31,7 @@
     "@nuxtjs/tailwindcss": "^4.2.1",
     "add": "^2.0.6",
     "node-html-markdown": "^1.2.0",
-    "postcss": "^8.4.17"
+    "postcss": "^8.4.17",
+    "vercel": "^28.4.12"
   }
 }

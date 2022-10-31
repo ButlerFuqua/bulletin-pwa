@@ -1,6 +1,9 @@
 <template>
-  <div class="p-2 h-full flex flex-col md:flex-row">
-    <h1>Testimony Blog</h1>
+  <div class="p-2">
+    <div>
+      Hey, here's a good testimony, yall!
+    </div>
+    <p v-for="num in 50">Content...</p>
   </div>
 </template>
 
