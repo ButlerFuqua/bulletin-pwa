@@ -26,10 +26,7 @@ export default Vue.extend({
   methods: {
   },
   async created() {
-    const { hash } = this.$nuxt.$route
-    if (hash.includes('type=recovery')) {
-      this.$router.push(`/entry/reset/${hash}`);
-    }
+
   }
 })
 </script>
