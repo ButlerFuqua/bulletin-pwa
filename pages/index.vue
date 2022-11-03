@@ -1,8 +1,5 @@
 <template>
   <div class="p-2">
-    <div>
-      Hey, here's a good testimony, yall!
-    </div>
     <div v-for="testimony in testimonies">
       <p class="text-lg">{{ testimony.body }}</p>
     </div>
