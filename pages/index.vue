@@ -3,7 +3,9 @@
     <div>
       Hey, here's a good testimony, yall!
     </div>
-    <p v-for="num in 50">Content...</p>
+    <div v-for="testimony in testimonies">
+      <p class="text-lg">{{ testimony.body }}</p>
+    </div>
   </div>
 </template>
 
@@ -11,9 +13,15 @@
 import Vue from 'vue';
 import axios, { AxiosResponse } from 'axios';
 
+export type Testimony = {
+  // autorId: string
+  body: string
+}
+
 type Data = {
   organization: null | string
   orgLocation: null | string
+  testimonies: null | Testimony[]
 }
 
 export default Vue.extend({
@@ -23,18 +31,19 @@ export default Vue.extend({
   data(): Data {
     return {
       organization: null,
-      orgLocation: null
+      orgLocation: null,
+      testimonies: null
     }
   },
   methods: {
     async getTestimonies() {
       try {
-        const response: AxiosResponse<any> = await axios.post('/api/get-testimonies', {
+        const { data: testimonies }: AxiosResponse<Testimony[]> = await axios.post('/api/get-testimonies', {
           organization: this.organization,
           orgLocation: this.orgLocation,
           accessToken: ''
         });;
-        console.log(response);
+        this.testimonies = testimonies;
       } catch (error) {
         console.error(error);
       }
