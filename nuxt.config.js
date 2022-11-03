@@ -10,6 +10,8 @@ export default {
 
   env: {
     // siteName: SITE_INFO.sitename,
+    organization: process.env.ORGANIZATION,
+    orgLocation: process.env.ORG_LOCATION,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head

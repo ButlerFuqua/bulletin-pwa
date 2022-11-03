@@ -9,9 +9,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import axios, { AxiosResponse } from 'axios';
 
 type Data = {
-
+  organization: null | string
+  orgLocation: null | string
 }
 
 export default Vue.extend({
@@ -20,13 +22,29 @@ export default Vue.extend({
   components: {},
   data(): Data {
     return {
-
+      organization: null,
+      orgLocation: null
     }
   },
   methods: {
+    async getTestimonies() {
+      try {
+        const response: AxiosResponse<any> = await axios.post('/api/get-testimonies', {
+          organization: this.organization,
+          orgLocation: this.orgLocation,
+          accessToken: ''
+        });;
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
   },
   async created() {
-
+    const { organization, orgLocation } = process?.env;
+    this.organization = organization || null;
+    this.orgLocation = orgLocation || null;
+    await this.getTestimonies();
   }
 })
 </script>
