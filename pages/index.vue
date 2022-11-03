@@ -11,7 +11,7 @@ import Vue from 'vue';
 import axios, { AxiosResponse } from 'axios';
 
 export type Testimony = {
-  // autorId: string
+  // authorId: string
   body: string
 }
 
