@@ -41,9 +41,8 @@ export default Vue.extend({
     }
   },
   async created() {
-    const { organization, orgLocation } = process?.env;
-    this.organization = organization || null;
-    this.orgLocation = orgLocation || null;
+    this.organization = process.env.organization || null;
+    this.orgLocation = process.env.orgLocation || null;
     await this.getTestimonies();
   }
 })
