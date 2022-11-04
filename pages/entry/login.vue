@@ -35,12 +35,22 @@ type Data = {
     password: null | string
 }
 
+type UserMetaData = {
+    username: string
+    org_slug: string
+    org_location: string
+    avatar_url: string
+}
+
+type UserResponse = {
+    id: string
+    email: string
+    user_metadata: UserMetaData
+}
+
 type UserLoginResponse = {
     access_token: string
-    user: {
-        email: string
-        id: string
-    }
+    user: UserResponse
 }
 
 export default Vue.extend({
@@ -57,12 +67,14 @@ export default Vue.extend({
     },
     methods: {
         async checkIfUserIsLoggedIn() {
+            const accessToken = localStorage.getItem(`${returnStoragePrefix()}-access-token`);
+            if (!accessToken)
+                return;
             try {
-                const { data }: AxiosResponse<UserLoginResponse> = await axios.post(`/api/login`, {
-                    email: this.email,
-                    password: this.password
+                const { data: userResponse }: AxiosResponse<UserResponse> = await axios.post(`/api/user`, {
+                    accessToken,
                 });
-                console.log('data', data);
+                console.log('data', userResponse);
             } catch (error: any) {
                 this.errorMessage = error.message;
                 console.error(error);
@@ -81,6 +93,7 @@ export default Vue.extend({
                 });
                 const { access_token, user: { id: user_id } } = userLoginResponse;
                 this.storeLoginCreds(access_token, user_id);
+                console.log(userLoginResponse)
             } catch (error: any) {
                 this.errorMessage = error.message;
                 console.error(error);
