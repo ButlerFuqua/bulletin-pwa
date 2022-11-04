@@ -9,11 +9,17 @@
                 <input class="my-2 p-2 rounded" type="text" name="username_or_email" v-model="email">
                 <input class="my-2 p-2 rounded" type="password" name="password" v-model="password">
                 <button
-                    class="bg-blue-500 hover:bg-blue-400 rounded shadow text-white transition-all ease-in-out">Login</button>
+                    class="bg-blue-500 hover:bg-blue-400 rounded shadow text-white transition-all ease-in-out p-2 px-3">
+                    Login
+                </button>
             </form>
-            <NuxtLink to="/entry/signup">
-                Sign up
-            </NuxtLink>
+            <div class="my-3 flex flex-col">
+                <NuxtLink
+                    class="bg-yellow-400 hover:bg-yellow-300 transition-all ease-in-out rounded p-2 px-3 text-center"
+                    to="/entry/signup">
+                    Sign up
+                </NuxtLink>
+            </div>
         </div>
         <div class="h-full" v-else-if="isSubmittingLogin">
             <FullLoader />
@@ -33,7 +39,6 @@ type Data = {
     errorMessage: string | null
     email: null | string
     password: null | string
-    user: null | UserResponse
 }
 
 type UserMetaData = {
@@ -69,7 +74,6 @@ export default Vue.extend({
             errorMessage: null,
             email: 'butlerfuqua+user1@gmail.com',
             password: 'password1',
-            user: null
         }
     },
     methods: {
@@ -99,7 +103,11 @@ export default Vue.extend({
         async submitLogin() {
             this.isSubmittingLogin = true;
             await this.login();
-            this.isSubmittingLogin = false
+            if (this.errorMessage) {
+                this.isSubmittingLogin = false
+                return;
+            }
+            this.$router.push(`/`);
         },
         async login() {
             try {
@@ -108,26 +116,20 @@ export default Vue.extend({
                     password: this.password
                 });
                 const { access_token, user } = userLoginResponse;
-                this.user = user;
-                this.storeLoginCreds(access_token);
-                console.log(userLoginResponse)
+                this.storeUserData(access_token, user);
             } catch (error: any) {
                 this.errorMessage = error.message;
                 console.error(error);
             }
         },
-        storeLoginCreds(accessToken: string) {
+        storeUserData(accessToken: string, user: UserResponse) {
             const storagePrefix = returnStoragePrefix();
             localStorage.setItem(`${storagePrefix}-access-token`, accessToken);
-            const { user } = this;
-            if (!user) {
-                throw new Error(`No User found after login`);
-            }
-            localStorage.setItem(`${storagePrefix}-userId`, user.id);
-            localStorage.setItem(`${storagePrefix}-email`, user.email);
-            localStorage.setItem(`${storagePrefix}-avatar-url`, user.user_metadata.avatar_url);
-            localStorage.setItem(`${storagePrefix}-org-slug`, user.user_metadata.org_slug);
-            localStorage.setItem(`${storagePrefix}-username`, user.user_metadata.username);
+            localStorage.setItem(`${storagePrefix}-user`, JSON.stringify({
+                id: user.id,
+                email: user.email,
+                ...user.user_metadata
+            }));
         }
     },
     async created() {

@@ -11,7 +11,7 @@ export const handler = async (event) => {
     try {
 
         const { data: testimonies } = await axios.get(
-            `${url}/rest/v1/testimonies?organization=eq.${orgSlug}${orgLocation ? `&org_location=eq.${orgLocation}` : ''}&select=*`,
+            `${url}/rest/v1/testimonies?org_slug=eq.${orgSlug}${orgLocation ? `&org_location=eq.${orgLocation}` : ''}&select=*`,
             {
                 headers: {
                     apiKey,
@@ -27,7 +27,10 @@ export const handler = async (event) => {
         }
     } catch (error) {
         console.error(`Error #get-testimonies`, error)
-        return { error }
+        return {
+            statusCode: error.response?.status || 500,
+            body: JSON.stringify(error),
+        }
     }
 
 }
