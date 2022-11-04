@@ -7,7 +7,7 @@
         <div v-if="!isSubmittingSignup">
             <form class="flex flex-col" @submit.prevent="submitSignup">
                 <input class="my-2 p-2 rounded" type="email" name="email" v-model="email" required>
-                <input class="my-2 p-2 rounded" type="text" name="username" v-model="email" required>
+                <input class="my-2 p-2 rounded" type="text" name="username" v-model="username" required>
                 <input class="my-2 p-2 rounded" type="password" name="password" v-model="password" required>
                 <button
                     class="bg-blue-500 hover:bg-blue-400 rounded shadow text-white transition-all ease-in-out p-2 px-3">
@@ -40,7 +40,10 @@ import { UserResponse, UserLoginResponse } from '~/types/user';
 type Data = {
     isSubmittingSignup: boolean
     errorMessage: string | null
+    username: string | null
     email: null | string
+    orgSlug: null | string
+    orgLocation: null | string
     password: null | string
 }
 
@@ -53,7 +56,10 @@ export default Vue.extend({
         return {
             isSubmittingSignup: false,
             errorMessage: null,
-            email: 'butlerfuqua+user1@gmail.com',
+            orgSlug: null,
+            orgLocation: null,
+            email: 'butlerfuqua+user2@gmail.com',
+            username: 'uniqueusername2',
             password: 'password1',
         }
     },
@@ -71,7 +77,10 @@ export default Vue.extend({
             try {
                 const { data: userLoginResponse }: AxiosResponse<UserLoginResponse> = await axios.post(`/api/signup`, {
                     email: this.email,
-                    password: this.password
+                    username: this.username,
+                    password: this.password,
+                    orgSlug: this.orgSlug,
+                    orgLocation: this.orgLocation,
                 });
                 const { access_token, user } = userLoginResponse;
                 this.storeUserData(access_token, user);
@@ -91,6 +100,8 @@ export default Vue.extend({
         }
     },
     async created() {
+        this.orgSlug = process.env.orgSlug || null;
+        this.orgLocation = process.env.orgLocation || null;
     }
 })
 </script>
