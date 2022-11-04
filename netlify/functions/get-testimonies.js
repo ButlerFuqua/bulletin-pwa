@@ -9,6 +9,7 @@ export const handler = async (event) => {
     const { organization, orgLocation } = JSON.parse(body)
 
     try {
+
         const { data: testimonies } = await axios.get(
             `${url}/rest/v1/testimonies?organization=eq.${organization}${orgLocation ? `&org_location=eq.${orgLocation}` : ''}&select=*`,
             {
@@ -19,13 +20,14 @@ export const handler = async (event) => {
                 },
             }
         );
+
         return {
             statusCode: 200,
             body: JSON.stringify(testimonies),
         }
     } catch (error) {
         console.error(`Error #get-testimonies`, error)
-        throw error
+        return { error }
     }
 
 }

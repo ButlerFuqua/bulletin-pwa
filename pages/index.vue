@@ -1,8 +1,11 @@
 <template>
-  <div class="p-2">
+  <div v-if="!errorMessage" class="p-2">
     <div v-for="testimony in testimonies">
       <p class="text-lg">{{ testimony.body }}</p>
     </div>
+  </div>
+  <div v-else-if="errorMessage" class="p-2">
+    <p class="text-lg">{{ errorMessage }}</p>
   </div>
 </template>
 
@@ -19,6 +22,7 @@ type Data = {
   organization: null | string
   orgLocation: null | string
   testimonies: null | Testimony[]
+  errorMessage: null | string
 }
 
 export default Vue.extend({
@@ -29,7 +33,8 @@ export default Vue.extend({
     return {
       organization: null,
       orgLocation: null,
-      testimonies: null
+      testimonies: null,
+      errorMessage: null,
     }
   },
   methods: {
@@ -37,31 +42,19 @@ export default Vue.extend({
       try {
         const { data: testimonies }: AxiosResponse<Testimony[]> = await axios.post('/api/get-testimonies', {
           organization: this.organization,
-          orgLocation: this.orgLocation,
-          accessToken: ''
-        });;
-        this.testimonies = testimonies;
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    async hey() {
-      try {
-        const { data }: AxiosResponse<any> = await axios.post('/api/hey', {
-          organization: this.organization,
           orgLocation: this.orgLocation
         });
-        console.log(data)
+        this.testimonies = testimonies;
       } catch (error) {
+        this.errorMessage = `Sorry, there was an error.`;
         console.error(error);
       }
     }
   },
   async created() {
-    console.log(process)
     this.organization = process.env.organization || null;
     this.orgLocation = process.env.orgLocation || null;
-    await this.hey();
+    await this.getTestimonies();
   }
 })
 </script>
