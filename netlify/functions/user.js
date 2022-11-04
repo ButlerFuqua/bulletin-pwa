@@ -27,7 +27,10 @@ export const handler = async (event) => {
         }
     } catch (error) {
         console.error(`Error #get-testimonies`, error)
-        return { error }
+        return {
+            statusCode: 200,
+            body: JSON.stringify(error),
+        }
     }
 
 }

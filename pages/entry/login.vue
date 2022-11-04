@@ -48,6 +48,11 @@ type UserResponse = {
     user_metadata: UserMetaData
 }
 
+type UnauthResponse = {
+    status: number
+    message: string
+}
+
 type UserLoginResponse = {
     access_token: string
     user: UserResponse
@@ -67,14 +72,23 @@ export default Vue.extend({
     },
     methods: {
         async checkIfUserIsLoggedIn() {
+            // todo rethink and finish this
             const accessToken = localStorage.getItem(`${returnStoragePrefix()}-access-token`);
             if (!accessToken)
                 return;
             try {
-                const { data: userResponse }: AxiosResponse<UserResponse> = await axios.post(`/api/user`, {
+                const { data }: AxiosResponse<UserResponse | UnauthResponse> = await axios.post(`/api/user`, {
                     accessToken,
                 });
-                console.log('data', userResponse);
+                // delete accessToken and return if it's expired
+                if ((data as any).status) {
+                    const { status } = data as UnauthResponse;
+                    if (status < 200 || status >= 300) {
+                        localStorage.removeItem(`${returnStoragePrefix()}-access-token`);
+                        return;
+                    }
+                }
+                const { email, } = data as UserResponse
             } catch (error: any) {
                 this.errorMessage = error.message;
                 console.error(error);
@@ -106,7 +120,7 @@ export default Vue.extend({
         }
     },
     async created() {
-        await this.checkIfUserIsLoggedIn();
+        // await this.checkIfUserIsLoggedIn();
     }
 })
 </script>
