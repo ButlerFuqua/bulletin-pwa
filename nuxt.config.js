@@ -1,3 +1,5 @@
+require('dotenv')
+
 const tailwindCssFilePath = 'assets/css/tailwind.css';
 
 export default {

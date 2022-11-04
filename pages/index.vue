@@ -58,10 +58,10 @@ export default Vue.extend({
     }
   },
   async created() {
+    console.log(process)
     this.organization = process.env.organization || null;
     this.orgLocation = process.env.orgLocation || null;
     await this.hey();
-
   }
 })
 </script>
