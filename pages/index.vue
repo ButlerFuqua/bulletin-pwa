@@ -48,8 +48,8 @@ export default Vue.extend({
     async hey() {
       try {
         const { data }: AxiosResponse<any> = await axios.post('/api/hey', {
-          organization: 'ORGANIZATION',
-          orgLocation: 'LOCATION',
+          organization: 'demo',
+          // orgLocation: 'LOCATION',
           accessToken: ''
         });
         console.log(data)
