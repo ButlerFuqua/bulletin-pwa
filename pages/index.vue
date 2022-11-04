@@ -48,9 +48,8 @@ export default Vue.extend({
     async hey() {
       try {
         const { data }: AxiosResponse<any> = await axios.post('/api/hey', {
-          organization: 'demo',
-          // orgLocation: 'LOCATION',
-          accessToken: ''
+          organization: this.organization,
+          orgLocation: this.orgLocation
         });
         console.log(data)
       } catch (error) {
@@ -61,7 +60,6 @@ export default Vue.extend({
   async created() {
     this.organization = process.env.organization || null;
     this.orgLocation = process.env.orgLocation || null;
-    // await this.getTestimonies();
     await this.hey();
 
   }
