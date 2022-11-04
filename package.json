@@ -7,6 +7,7 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
+    "buildgen": "nuxt build && nuxt generate",
     "n": "netlify dev"
   },
   "dependencies": {
@@ -15,7 +16,6 @@
     "autoprefixer": "^10.4.12",
     "axios": "^1.1.3",
     "core-js": "^3.19.3",
-    "dotenv": "^16.0.3",
     "nuxt": "^2.15.8",
     "sass": "^1.54.9",
     "sass-loader": "~10.0.2",
