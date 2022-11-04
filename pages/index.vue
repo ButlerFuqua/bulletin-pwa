@@ -44,12 +44,22 @@ export default Vue.extend({
       } catch (error) {
         console.error(error);
       }
+    },
+    async hey() {
+      try {
+        const { data }: AxiosResponse<any> = await axios.post('/api/hey');
+        console.log(data)
+      } catch (error) {
+        console.error(error);
+      }
     }
   },
   async created() {
     this.organization = process.env.organization || null;
     this.orgLocation = process.env.orgLocation || null;
-    await this.getTestimonies();
+    // await this.getTestimonies();
+    await this.hey();
+
   }
 })
 </script>
