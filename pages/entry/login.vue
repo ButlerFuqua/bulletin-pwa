@@ -33,6 +33,7 @@ type Data = {
     errorMessage: string | null
     email: null | string
     password: null | string
+    user: null | UserResponse
 }
 
 type UserMetaData = {
@@ -67,7 +68,8 @@ export default Vue.extend({
             isSubmittingLogin: false,
             errorMessage: null,
             email: 'butlerfuqua+user1@gmail.com',
-            password: 'password1'
+            password: 'password1',
+            user: null
         }
     },
     methods: {
@@ -105,18 +107,27 @@ export default Vue.extend({
                     email: this.email,
                     password: this.password
                 });
-                const { access_token, user: { id: user_id } } = userLoginResponse;
-                this.storeLoginCreds(access_token, user_id);
+                const { access_token, user } = userLoginResponse;
+                this.user = user;
+                this.storeLoginCreds(access_token);
                 console.log(userLoginResponse)
             } catch (error: any) {
                 this.errorMessage = error.message;
                 console.error(error);
             }
         },
-        storeLoginCreds(accessToken: string, userId: string) {
+        storeLoginCreds(accessToken: string) {
             const storagePrefix = returnStoragePrefix();
             localStorage.setItem(`${storagePrefix}-access-token`, accessToken);
-            localStorage.setItem(`${storagePrefix}-userId`, userId);
+            const { user } = this;
+            if (!user) {
+                throw new Error(`No User found after login`);
+            }
+            localStorage.setItem(`${storagePrefix}-userId`, user.id);
+            localStorage.setItem(`${storagePrefix}-email`, user.email);
+            localStorage.setItem(`${storagePrefix}-avatar-url`, user.user_metadata.avatar_url);
+            localStorage.setItem(`${storagePrefix}-org-slug`, user.user_metadata.org_slug);
+            localStorage.setItem(`${storagePrefix}-username`, user.user_metadata.username);
         }
     },
     async created() {
