@@ -24,7 +24,7 @@ export type Testimony = {
 }
 
 type Data = {
-  organization: null | string
+  orgSlug: null | string
   orgLocation: null | string
   testimonies: null | Testimony[]
   errorMessage: null | string
@@ -37,7 +37,7 @@ export default Vue.extend({
   components: { FullLoader },
   data(): Data {
     return {
-      organization: null,
+      orgSlug: null,
       orgLocation: null,
       testimonies: null,
       errorMessage: null,
@@ -48,19 +48,19 @@ export default Vue.extend({
     async getTestimonies() {
       try {
         const { data: testimonies }: AxiosResponse<Testimony[]> = await axios.post('/api/get-testimonies', {
-          organization: this.organization,
+          orgSlug: this.orgSlug,
           orgLocation: this.orgLocation
         });
         this.testimonies = testimonies;
       } catch (error) {
-        this.errorMessage = `Sorry, there was an error.`;
+        this.errorMessage = `Oops! there was an error :(`;
         console.error(error);
       }
       this.isLoading = false;
     }
   },
   async created() {
-    this.organization = process.env.organization || null;
+    this.orgSlug = process.env.orgSlug || null;
     this.orgLocation = process.env.orgLocation || null;
     await this.getTestimonies();
   }

@@ -11,7 +11,7 @@ export default {
 
   env: {
     // siteName: SITE_INFO.sitename,
-    organization: process.env.ORGANIZATION,
+    orgSlug: process.env.ORG_SLUG,
     orgLocation: process.env.ORG_LOCATION,
   },
 

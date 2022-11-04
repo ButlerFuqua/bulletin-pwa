@@ -5,3 +5,6 @@ export const returnFriendlyDate = (date: string): string => {
 export const slugifyString = (titleString: string) => {
     return titleString.toLowerCase().replace(/[^A-Za-z0-9]+/g, '-')
 }
+
+export const returnStoragePrefix = () =>
+    `testimony-blog-${process.env.orgSlug}-${process.env.orgLocation}`;

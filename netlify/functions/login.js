@@ -6,17 +6,21 @@ const { TB_SUPABASE_KEY: apiKey, TB_SUPABASE_URL: url, TB_SERVICE_ROLE: serviceR
 export const handler = async (event) => {
 
     const { body } = event;
-    const { orgSlug, orgLocation } = JSON.parse(body)
+    const { email, password } = JSON.parse(body)
 
     try {
 
-        const { data: testimonies } = await axios.get(
-            `${url}/rest/v1/testimonies?organization=eq.${orgSlug}${orgLocation ? `&org_location=eq.${orgLocation}` : ''}&select=*`,
+        const { data: testimonies } = await axios.post(
+            `${url}/auth/v1/token?grant_type=password`,
+            {
+                email,
+                password,
+            },
             {
                 headers: {
                     apiKey,
                     Authorization: `Bearer ${serviceRole}`,
-                    Range: '0-9'
+                    ['Content-Type']: 'application/json'
                 },
             }
         );
