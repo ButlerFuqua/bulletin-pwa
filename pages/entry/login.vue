@@ -6,8 +6,8 @@
         </div>
         <div v-if="!isSubmittingLogin">
             <form class="flex flex-col" @submit.prevent="submitLogin">
-                <input class="my-2 p-2 rounded" type="text" name="username_or_email" v-model="email">
-                <input class="my-2 p-2 rounded" type="password" name="password" v-model="password">
+                <input class="my-2 p-2 rounded" type="email" name="email" v-model="email" required>
+                <input class="my-2 p-2 rounded" type="password" name="password" v-model="password" required>
                 <button
                     class="bg-blue-500 hover:bg-blue-400 rounded shadow text-white transition-all ease-in-out p-2 px-3">
                     Login
@@ -33,6 +33,8 @@ import axios, { AxiosResponse } from 'axios';
 
 import FullLoader from '../../components/layout/fullLoader.vue'
 import { returnStoragePrefix } from '~/utils/string.utils';
+import { UnauthResponse } from '~/types/auth';
+import { UserResponse, UserLoginResponse } from '~/types/user';
 
 type Data = {
     isSubmittingLogin: boolean
@@ -41,28 +43,6 @@ type Data = {
     password: null | string
 }
 
-type UserMetaData = {
-    username: string
-    org_slug: string
-    org_location: string
-    avatar_url: string
-}
-
-type UserResponse = {
-    id: string
-    email: string
-    user_metadata: UserMetaData
-}
-
-type UnauthResponse = {
-    status: number
-    message: string
-}
-
-type UserLoginResponse = {
-    access_token: string
-    user: UserResponse
-}
 
 export default Vue.extend({
     name: 'LoginPage',
