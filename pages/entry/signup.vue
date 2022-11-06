@@ -75,13 +75,6 @@ export default Vue.extend({
         },
         async Signup() {
             try {
-                console.log({
-                    email: this.email,
-                    username: this.username,
-                    password: this.password,
-                    orgSlug: this.orgSlug,
-                    orgLocation: this.orgLocation,
-                })
                 const { data: userLoginResponse }: AxiosResponse<UserLoginResponse> = await axios.post(`/api/signup`, {
                     email: this.email,
                     username: this.username,
