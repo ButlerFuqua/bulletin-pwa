@@ -21,9 +21,7 @@
                 </NuxtLink>
             </div>
         </div>
-        <div class="h-full" v-else-if="isSubmittingLogin">
-            <FullLoader />
-        </div>
+        <FullLoader v-else-if="isSubmittingLogin" />
     </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
-    <div class="bg-gray-100 relative h-full">
+    <div class="bg-gray-100 relative">
         <MainNav />
-        <div class="container xl m-auto h-full">
+        <div class="container xl m-auto ">
             <nuxt />
         </div>
         <BottomBar />

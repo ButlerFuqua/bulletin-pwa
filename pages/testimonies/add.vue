@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full">
+    <div>
         <div v-if="currentUser && !isSubmittingForm">
             <h1>Add Testimony</h1>
             <button @click="cancelCreate"

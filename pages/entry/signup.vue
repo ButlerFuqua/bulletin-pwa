@@ -22,9 +22,7 @@
                 </NuxtLink>
             </div>
         </div>
-        <div class="h-full" v-else-if="isSubmittingSignup">
-            <FullLoader />
-        </div>
+        <FullLoader v-else-if="isSubmittingSignup" />
     </div>
 </template>
 

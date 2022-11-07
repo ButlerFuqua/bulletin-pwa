@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full">
+    <div>
         <div v-if="profile">
             <h1>{{ profile.username }}</h1>
             <button v-if="profile.id === currentUser?.id" @click="$router.push(`/members/edit/${userId}`)"

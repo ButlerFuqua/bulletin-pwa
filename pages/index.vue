@@ -8,9 +8,7 @@
       </button>
     </div>
   </div>
-  <div v-else-if="isLoading && !errorMessage" class="h-full">
-    <FullLoader />
-  </div>
+  <FullLoader v-else-if="isLoading && !errorMessage" />
   <div v-else-if="errorMessage" class="p-2">
     <p class="text-lg">{{ errorMessage }}</p>
   </div>
