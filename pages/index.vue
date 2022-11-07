@@ -1,8 +1,9 @@
 <template>
   <div v-if="!errorMessage && !isLoading" class="p-2">
-    <div v-for="testimony in testimonies">
+    <!-- <div v-for="testimony in testimonies">
       <p class="text-lg">{{ testimony.body }}</p>
-    </div>
+    </div> -->
+    <TestimonyThumb v-for="testimony in testimonies" :testimonyData="testimony" :key="testimony.id" />
   </div>
   <div v-else-if="isLoading && !errorMessage" class="h-full">
     <FullLoader />
@@ -15,18 +16,15 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios, { AxiosResponse } from 'axios';
+import TestimonyThumb from '~/components/testimonies/testimonyThumb.vue'
 
 import FullLoader from '../components/layout/fullLoader.vue'
-
-export type Testimony = {
-  // authorId: string
-  body: string
-}
+import { TestimonyDTO, TestimonyResponse } from '~/types/testimony';
 
 type Data = {
   orgSlug: null | string
   orgLocation: null | string
-  testimonies: null | Testimony[]
+  testimonies: null | TestimonyDTO[]
   errorMessage: null | string
   isLoading: boolean
 }
@@ -34,7 +32,7 @@ type Data = {
 export default Vue.extend({
   name: 'IndexPage',
   layout: 'landing',
-  components: { FullLoader },
+  components: { FullLoader, TestimonyThumb },
   data(): Data {
     return {
       orgSlug: null,
@@ -47,11 +45,19 @@ export default Vue.extend({
   methods: {
     async getTestimonies() {
       try {
-        const { data: testimonies }: AxiosResponse<Testimony[]> = await axios.post('/api/get-testimonies', {
+        const { data: testimonies }: AxiosResponse<TestimonyResponse[]> = await axios.post('/api/get-testimonies', {
           orgSlug: this.orgSlug,
           orgLocation: this.orgLocation
         });
-        this.testimonies = testimonies;
+        this.testimonies = testimonies.map(testimony => ({
+          id: testimony.id,
+          authorId: testimony.author_id,
+          body: testimony.body,
+          authorUsername: testimony.author_username,
+          authorAvatarUrl: testimony.author_avatar_url,
+          orgSlug: testimony.org_slug,
+          orgLocation: testimony.org_Location,
+        }));
       } catch (error) {
         this.errorMessage = `Oops! there was an error :(`;
         console.error(error);

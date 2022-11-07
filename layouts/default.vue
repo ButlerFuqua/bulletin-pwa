@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full">
+    <div class="h-full bg-gray-100">
         <MainNav :userData="userData?.user_metadata || null" />
         <div class="container xl m-auto h-full">
             <nuxt />

@@ -76,7 +76,6 @@ export default Vue.extend({
                     accessToken: getAccessToken(),
                     username: this.username
                 });
-                console.log('UPDATE DATA', data)
                 await this.getProfileByUserId();
                 await this.getCurrentUser();
             } catch (error: any) {

@@ -83,7 +83,6 @@ export default Vue.extend({
     async created() {
         // @ts-ignore
         const userData = await this.getUserDataIfLoggedIn();
-        console.log('userData', userData)
         if (!userData.error) {
             this.user = {
                 ...(userData as UserResponse).user_metadata,
