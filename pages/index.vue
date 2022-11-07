@@ -23,7 +23,6 @@ import TestimonyThumb from '~/components/testimonies/testimonyThumb.vue'
 
 import FullLoader from '../components/layout/fullLoader.vue'
 import { TestimonyDTO, TestimonyResponse } from '~/types/testimony';
-import test from 'node:test';
 
 type Data = {
   orgSlug: null | string
