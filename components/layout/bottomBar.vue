@@ -1,6 +1,10 @@
 <template>
-    <div v-if="user" class="sticky bottom-0 bg-white p-2 flex align-center justify-center">
-        Add Testimony
+    <div id="bottomBar" v-if="user" :class="!showBottomBar ? 'hide' : ''"
+        class="fixed w-full bottom-0 border-t bg-white flex align-center justify-center z-1">
+        <button @click="$router.push(`/testimonies/add`)"
+            class="h-full border-l hover:bg-gray-100 transition-all ease border-r py-2 px-2">
+            Add Testimony
+        </button>
     </div>
 </template>
 
@@ -12,6 +16,7 @@ import { UserDTO, UserResponse } from '~/types/user';
 
 type Data = {
     user: null | UserDTO
+    showBottomBar: boolean
 }
 
 export default Vue.extend({
@@ -19,10 +24,18 @@ export default Vue.extend({
     mixins: [AuthMixin],
     data(): Data {
         return {
-            user: null
+            user: null,
+            showBottomBar: true,
         }
     },
     async created() {
+        this.$nuxt.$on('hideBottomBar', () => {
+            this.showBottomBar = false;
+        });
+        this.$nuxt.$on('showBottomBar', () => {
+            this.showBottomBar = true;
+        });
+
         //@ts-ignore
         const userData = await this.getUserDataIfLoggedIn();
         console.log('userData', userData)
@@ -37,3 +50,15 @@ export default Vue.extend({
     }
 })
 </script>
+
+<style lang="scss" scoped>
+#bottomBar {
+    opacity: 1;
+    transition: all .3s;
+
+    &.hide {
+        opacity: 0;
+        bottom: -50px;
+    }
+}
+</style>

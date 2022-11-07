@@ -30,6 +30,7 @@ type Data = {
   testimonies: null | TestimonyDTO[]
   errorMessage: null | string
   isLoading: boolean
+  loadingMore: boolean
 }
 
 export default Vue.extend({
@@ -42,11 +43,13 @@ export default Vue.extend({
       orgLocation: null,
       testimonies: null,
       errorMessage: null,
-      isLoading: true
+      isLoading: true,
+      loadingMore: false
     }
   },
   methods: {
     async getTestimonies(from = 0, to = 9) {
+      this.loadingMore = true
       try {
         const { data: testimonies }: AxiosResponse<TestimonyResponse[]> = await axios.post('/api/get-testimonies', {
           orgSlug: this.orgSlug,
@@ -54,7 +57,8 @@ export default Vue.extend({
           from,
           to
         });
-        this.testimonies = [...this.testimonies || [], ...testimonies.map(testimony => ({
+        let end = testimonies.length
+        this.testimonies = [...this.testimonies || [], ...testimonies.slice(0, end).map(testimony => ({
           id: testimony.id,
           authorId: testimony.author_id,
           body: testimony.body,
@@ -64,10 +68,11 @@ export default Vue.extend({
           orgLocation: testimony.org_Location,
         }))];
       } catch (error) {
-        this.errorMessage = `Oops! there was an error :(`;
         console.error(error);
+        this.errorMessage = `Oops! there was an error :(`;
       }
       this.isLoading = false;
+      this.loadingMore = false
     }
   },
   async created() {

@@ -1,6 +1,6 @@
 <template>
-    <div class="bg-gray-100">
-        <MainNav :userData="userData?.user_metadata || null" />
+    <div class="bg-gray-100 relative h-full">
+        <MainNav />
         <div class="container xl m-auto h-full">
             <nuxt />
         </div>
@@ -15,7 +15,7 @@ import MainNav from '~/components/layout/mainNav.vue'
 import BottomBar from '~/components/layout/bottomBar.vue'
 
 type Data = {
-    userData: null | UserResponse
+
 }
 
 export default Vue.extend({
@@ -24,7 +24,7 @@ export default Vue.extend({
     components: { MainNav, BottomBar },
     data(): Data {
         return {
-            userData: null
+
         }
     },
     methods: {},

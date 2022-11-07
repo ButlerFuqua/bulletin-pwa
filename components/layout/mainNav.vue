@@ -3,12 +3,12 @@
         <div class="w-full p-1 text-center">
             <h1 class="text-lg text-white">Testimony Blog</h1>
         </div>
-        <button @click="showNav = true" class="bg-blue-600 hover:bg-blue-400 text-white transition-all ease-in-out p-1">
+        <button @click="showMainNav" class="bg-blue-600 hover:bg-blue-400 text-white transition-all ease-in-out p-1">
             Menu
         </button>
         <div id="mainNav" :class="showNav ? '' : 'hide-nav'" class="fixed bg-purple-800 w-full h-full top-0">
             <div class="flex justify-end">
-                <button @click="showNav = false"
+                <button @click="hideMainNav"
                     class="bg-blue-600 hover:bg-blue-400 text-white transition-all ease-in-out p-1">
                     Close
                 </button>
@@ -46,7 +46,6 @@ import { UserDTO, UserResponse } from '~/types/user';
 import AuthMixin from '~/mixins/auth.vue'
 import { clearLocalUserData } from '~/utils/auth.utils';
 
-
 type Data = {
     showNav: boolean
     user: null | UserDTO
@@ -78,6 +77,14 @@ export default Vue.extend({
             this.$router.push(`/`);
             this.showNav = false;
             this.user = null;
+        },
+        showMainNav() {
+            this.showNav = true;
+            this.$nuxt.$emit('hideBottomBar')
+        },
+        hideMainNav() {
+            this.showNav = false;
+            this.$nuxt.$emit('showBottomBar')
         }
     },
     async created() {
@@ -95,7 +102,7 @@ export default Vue.extend({
 
 <style lang="scss">
 #mainNav {
-
+    z-index: 99;
     transition: all .3s;
     left: 0;
     opacity: 1;

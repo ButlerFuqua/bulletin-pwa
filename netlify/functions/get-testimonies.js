@@ -11,12 +11,12 @@ export const handler = async (event) => {
     try {
 
         const { data: testimonies } = await axios.get(
-            `${url}/rest/v1/testimonies?org_slug=eq.${orgSlug}${orgLocation ? `&org_location=eq.${orgLocation}` : ''}&select=*`,
+            `${url}/rest/v1/testimonies?org_slug=eq.${orgSlug}${orgLocation ? `&org_location=eq.${orgLocation}` : ''}&order=created_at.desc&select=*`,
             {
                 headers: {
                     apiKey,
                     Authorization: `Bearer ${serviceRole}`,
-                    Range: `${from || 0}-${to || 9}`
+                    Range: `${from || 0}-${to || 9}`,
                 },
             }
         );
@@ -29,7 +29,7 @@ export const handler = async (event) => {
         console.error(`Error #get-testimonies`, error)
         return {
             statusCode: error.response?.status || 500,
-            body: JSON.stringify(error),
+            body: JSON.stringify(error.message || error.response),
         }
     }
 
