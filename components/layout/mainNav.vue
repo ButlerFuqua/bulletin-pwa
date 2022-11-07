@@ -6,26 +6,35 @@
         <button @click="showNav = true" class="bg-blue-600 hover:bg-blue-400 text-white transition-all ease-in-out p-1">
             Menu
         </button>
-        <div id="mainNav" :class="showNav ? '' : 'hide-nav'" class="fixed bg-purple-500 w-full h-full top-0">
+        <div id="mainNav" :class="showNav ? '' : 'hide-nav'" class="fixed bg-purple-800 w-full h-full top-0">
             <div class="flex justify-end">
                 <button @click="showNav = false"
                     class="bg-blue-600 hover:bg-blue-400 text-white transition-all ease-in-out p-1">
                     Close
                 </button>
             </div>
-            <div id="userInfo">
-                <div v-if="user" class="">
-                    {{ user.username }}
+            <div id="userInfo" class="text-white">
+                <div v-if="user" class="flex flex-col items-center justify-center">
+                    <p class="my-2">Logged in as <span class="text-yellow-400">{{ user.username }}</span></p>
+                    <NuxtLink :to="`/members/${user.id}`">
+                        <button
+                            class="bg-blue-500 hover:bg-blue-400 transition-all eas-in-out text-white py-1 px-2 rounded shadow">
+                            Profile
+                        </button>
+                    </NuxtLink>
                 </div>
                 <div v-else class="flex flex-col">
                     <NuxtLink to="/entry/login">
                         <button
-                            class="bg-blue-500 hover:bg-blue-400 transition-all eas-in-out text-white py-1 px-2 rounded shadow">Login</button>
+                            class="bg-blue-500 hover:bg-blue-400 transition-all eas-in-out text-white py-1 px-2 rounded shadow">
+                            Login
+                        </button>
                     </NuxtLink>
                     <NuxtLink to="/entry/signup">
                         <button
-                            class="bg-yellow-300 hover:bg-yellow-200 transition-all eas-in-out text-black py-1 px-2 rounded shadow">Sign
-                            up</button>
+                            class="bg-yellow-300 hover:bg-yellow-200 transition-all eas-in-out text-black py-1 px-2 rounded shadow">
+                            Sign up
+                        </button>
                     </NuxtLink>
                 </div>
             </div>
@@ -35,13 +44,13 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { UserMetaData, UserResponse } from '~/types/user';
+import { UserDTO, UserResponse } from '~/types/user';
 import AuthMixin from '~/mixins/auth.vue'
 
 
 type Data = {
     showNav: boolean
-    user: null | UserMetaData
+    user: null | UserDTO
 }
 
 export default Vue.extend({
@@ -50,7 +59,7 @@ export default Vue.extend({
     mixins: [AuthMixin],
     data(): Data {
         return {
-            showNav: true,
+            showNav: false,
             user: null
         }
     },
@@ -59,7 +68,10 @@ export default Vue.extend({
         const userData = await this.getUserDataIfLoggedIn();
         console.log('userData', userData)
         if (!userData.error) {
-            this.user = (userData as UserResponse).user_metadata;
+            this.user = {
+                ...(userData as UserResponse).user_metadata,
+                id: userData.id
+            };
         }
     }
 })

@@ -34,8 +34,9 @@ import axios, { AxiosResponse } from 'axios';
 
 import FullLoader from '../../components/layout/fullLoader.vue'
 import { returnStoragePrefix } from '~/utils/string.utils';
-import { UnauthResponse } from '~/types/auth';
+import { accessTokenKey } from '~/utils/auth.utils';
 import { UserResponse, UserLoginResponse } from '~/types/user';
+import { userTokenKey } from '~/utils/user.utils';
 
 type Data = {
     isSubmittingSignup: boolean
@@ -91,8 +92,8 @@ export default Vue.extend({
         },
         storeUserData(accessToken: string, user: UserResponse) {
             const storagePrefix = returnStoragePrefix();
-            localStorage.setItem(`${storagePrefix}-access-token`, accessToken);
-            localStorage.setItem(`${storagePrefix}-user`, JSON.stringify({
+            localStorage.setItem(`${storagePrefix}${accessTokenKey}`, accessToken);
+            localStorage.setItem(`${storagePrefix}${userTokenKey}`, JSON.stringify({
                 id: user.id,
                 email: user.email,
                 ...user.user_metadata
