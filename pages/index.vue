@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!errorMessage && !isLoading" class="p-2">
+  <div v-if="!errorMessage && !isLoading" id="main-testimonies-container" class="p-2">
     <TestimonyThumb v-for="testimony in testimonies" :testimonyData="testimony" :key="testimony.id" />
     <div class="flex justify-center">
       <button v-if="testimonies" @click="getTestimonies(testimonies?.length, (testimonies?.length || 0) + 10)"
@@ -80,3 +80,9 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+#main-testimonies-container {
+  padding-bottom: 100px;
+}
+</style>

@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div v-if="profile">
+    <div id="profile-page">
+        <div v-if="profile" class="h-full">
             <h1>{{ profile.username }}</h1>
             <button v-if="profile.id === currentUser?.id" @click="$router.push(`/members/edit/${userId}`)"
                 class="text-orange-400 hover:text-orange-500 transition-all ease-in-out">Edit</button>
@@ -66,3 +66,10 @@ export default Vue.extend({
     }
 })
 </script>
+
+
+<style lang="scss" scoped>
+#profile-page {
+    min-height: 90vh;
+}
+</style>
