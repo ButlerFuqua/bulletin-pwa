@@ -16,26 +16,24 @@
             <div id="userInfo" class="text-white">
                 <div v-if="user" class="flex flex-col items-center justify-center">
                     <p class="my-2">Logged in as <span class="text-yellow-400">{{ user.username }}</span></p>
-                    <NuxtLink :to="`/members/${user.id}`">
-                        <button
-                            class="bg-blue-500 hover:bg-blue-400 transition-all eas-in-out text-white py-1 px-2 rounded shadow">
-                            Profile
-                        </button>
-                    </NuxtLink>
+                    <button @click="goToPage(`/members/${user?.id}`)"
+                        class="bg-blue-500 hover:bg-blue-400 transition-all eas-in-out text-white py-1 px-2 rounded shadow">
+                        Profile
+                    </button>
+                    <button @click="logout"
+                        class="bg-gray-500 hover:bg-gray-400 transition-all eas-in-out text-white py-1 px-2 rounded shadow">
+                        Logout
+                    </button>
                 </div>
                 <div v-else class="flex flex-col">
-                    <NuxtLink to="/entry/login">
-                        <button
-                            class="bg-blue-500 hover:bg-blue-400 transition-all eas-in-out text-white py-1 px-2 rounded shadow">
-                            Login
-                        </button>
-                    </NuxtLink>
-                    <NuxtLink to="/entry/signup">
-                        <button
-                            class="bg-yellow-300 hover:bg-yellow-200 transition-all eas-in-out text-black py-1 px-2 rounded shadow">
-                            Sign up
-                        </button>
-                    </NuxtLink>
+                    <button @click="goToPage(`/entry/login`)"
+                        class="bg-blue-500 hover:bg-blue-400 transition-all eas-in-out text-white py-1 px-2 rounded shadow">
+                        Login
+                    </button>
+                    <button @click="goToPage(`/entry/signup`)"
+                        class="bg-yellow-300 hover:bg-yellow-200 transition-all eas-in-out text-black py-1 px-2 rounded shadow">
+                        Sign up
+                    </button>
                 </div>
             </div>
         </div>
@@ -46,6 +44,7 @@
 import Vue from 'vue';
 import { UserDTO, UserResponse } from '~/types/user';
 import AuthMixin from '~/mixins/auth.vue'
+import { clearLocalUserData } from '~/utils/auth.utils';
 
 
 type Data = {
@@ -61,6 +60,24 @@ export default Vue.extend({
         return {
             showNav: false,
             user: null
+        }
+    },
+    methods: {
+        goToPage(path: string, options?: any) {
+            this.$router.push({
+                path
+            });
+            this.showNav = false;
+        },
+        logout() {
+
+            if (!confirm(`Are you sure you want to logout?`))
+                return;
+
+            clearLocalUserData();
+            this.$router.push(`/`);
+            this.showNav = false;
+            this.user = null;
         }
     },
     async created() {

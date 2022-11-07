@@ -2,6 +2,8 @@
     <div class="h-full">
         <div v-if="profile">
             <h1>{{ profile.username }}</h1>
+            <button v-if="profile.id === currentUser?.id" @click="$router.push(`/members/edit/${userId}`)"
+                class="text-orange-400 hover:text-orange-500 transition-all ease-in-out">Edit</button>
         </div>
         <FullLoader v-else />
     </div>
@@ -11,7 +13,7 @@
 import axios, { AxiosResponse } from 'axios';
 import Vue from 'vue';
 import AuthMixin from '~/mixins/auth.vue'
-import { ProfileResponse, UserDTO, UserLoginResponse, UserResponse } from '~/types/user';
+import { ProfileResponse, UserDTO, UserResponse } from '~/types/user';
 import { getAccessToken } from '~/utils/auth.utils';
 import FullLoader from '~/components/layout/fullLoader.vue'
 
@@ -23,6 +25,7 @@ type Data = {
 
 export default Vue.extend({
     name: 'ProfilePlage',
+    layout: 'default',
     mixins: [AuthMixin],
     components: { FullLoader },
     data(): Data {
@@ -42,7 +45,6 @@ export default Vue.extend({
                 this.profile = profileResponse;
             } catch (error: any) {
                 console.error(error);
-
             }
         },
         async getCurrentUser() {
@@ -51,12 +53,11 @@ export default Vue.extend({
             if ((currentUser as any).error) {
                 return
             }
-
             this.currentUser = {
                 ...currentUser.user_metadata,
                 id: currentUser.id
             }
-        }
+        },
     },
     async created() {
         this.userId = this.$route.params.id || null;
