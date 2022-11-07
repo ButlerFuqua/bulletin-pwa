@@ -1,9 +1,10 @@
 <template>
-    <div class="h-full bg-gray-100">
+    <div class="bg-gray-100">
         <MainNav :userData="userData?.user_metadata || null" />
         <div class="container xl m-auto h-full">
             <nuxt />
         </div>
+        <BottomBar />
     </div>
 </template>
 
@@ -11,6 +12,7 @@
 import Vue from 'vue'
 import { UserResponse } from '~/types/user'
 import MainNav from '~/components/layout/mainNav.vue'
+import BottomBar from '~/components/layout/bottomBar.vue'
 
 type Data = {
     userData: null | UserResponse
@@ -19,7 +21,7 @@ type Data = {
 export default Vue.extend({
     name: 'DefaultLayout',
     head: {},
-    components: { MainNav },
+    components: { MainNav, BottomBar },
     data(): Data {
         return {
             userData: null

@@ -9,7 +9,6 @@
                 {{ testimony.body }}
             </div>
         </div>
-        {{ testimony.id }}
     </div>
     <FullLoader v-else />
 </template>
