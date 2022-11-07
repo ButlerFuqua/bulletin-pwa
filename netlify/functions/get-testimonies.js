@@ -6,7 +6,7 @@ const { TB_SUPABASE_KEY: apiKey, TB_SUPABASE_URL: url, TB_SERVICE_ROLE: serviceR
 export const handler = async (event) => {
 
     const { body } = event;
-    const { orgSlug, orgLocation } = JSON.parse(body)
+    const { orgSlug, orgLocation, from, to } = JSON.parse(body)
 
     try {
 
@@ -16,7 +16,7 @@ export const handler = async (event) => {
                 headers: {
                     apiKey,
                     Authorization: `Bearer ${serviceRole}`,
-                    Range: '0-9'
+                    Range: `${from || 0}-${to || 9}`
                 },
             }
         );

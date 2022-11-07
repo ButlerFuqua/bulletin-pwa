@@ -1,9 +1,12 @@
 <template>
   <div v-if="!errorMessage && !isLoading" class="p-2">
-    <!-- <div v-for="testimony in testimonies">
-      <p class="text-lg">{{ testimony.body }}</p>
-    </div> -->
     <TestimonyThumb v-for="testimony in testimonies" :testimonyData="testimony" :key="testimony.id" />
+    <div class="flex justify-center">
+      <button v-if="testimonies" @click="getTestimonies(testimonies?.length, (testimonies?.length || 0) + 10)"
+        class="bg-blue-500 hover:bg-blue-400 text-white transition-all ease-in-out py-1 px-2 rounded">
+        Load More
+      </button>
+    </div>
   </div>
   <div v-else-if="isLoading && !errorMessage" class="h-full">
     <FullLoader />
@@ -20,6 +23,7 @@ import TestimonyThumb from '~/components/testimonies/testimonyThumb.vue'
 
 import FullLoader from '../components/layout/fullLoader.vue'
 import { TestimonyDTO, TestimonyResponse } from '~/types/testimony';
+import test from 'node:test';
 
 type Data = {
   orgSlug: null | string
@@ -43,13 +47,15 @@ export default Vue.extend({
     }
   },
   methods: {
-    async getTestimonies() {
+    async getTestimonies(from = 0, to = 9) {
       try {
         const { data: testimonies }: AxiosResponse<TestimonyResponse[]> = await axios.post('/api/get-testimonies', {
           orgSlug: this.orgSlug,
-          orgLocation: this.orgLocation
+          orgLocation: this.orgLocation,
+          from,
+          to
         });
-        this.testimonies = testimonies.map(testimony => ({
+        this.testimonies = [...this.testimonies || [], ...testimonies.map(testimony => ({
           id: testimony.id,
           authorId: testimony.author_id,
           body: testimony.body,
@@ -57,7 +63,7 @@ export default Vue.extend({
           authorAvatarUrl: testimony.author_avatar_url,
           orgSlug: testimony.org_slug,
           orgLocation: testimony.org_Location,
-        }));
+        }))];
       } catch (error) {
         this.errorMessage = `Oops! there was an error :(`;
         console.error(error);
