@@ -20,7 +20,7 @@
         </div>
         <FullLoader v-else-if="isSubmittingForm" />
         <div v-else>
-            <button @click="$router.push(`/testimonies/${this.testimonyId}`)"
+            <button @click="$router.push(`/testimonies/${testimonyId}`)"
                 class="text-blue-500 hover:text-blue-400 text-white transition-all ease-in-out">
                 View Testimony
             </button>
