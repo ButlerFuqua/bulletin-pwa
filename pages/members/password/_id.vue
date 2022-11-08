@@ -2,18 +2,19 @@
     <div>
         <div v-if="profile && currentUser && !isSubmittingForm">
             <h1>{{ profile.username }}</h1>
-            <div v-if="profile.id === currentUser?.id">
-                <button @click="cancelEdit"
-                    class="text-orange-400 hover:text-orange-500 transition-all ease-in-out">Cancel</button>
-                <button @click="$router.push(`/members/password/${currentUser?.id}`)"
-                    class="text-teal-400 hover:text-teal-500 transition-all ease-in-out">Change Password</button>
-            </div>
+            <button v-if="profile.id === currentUser?.id" @click="cancelEdit"
+                class="text-orange-400 hover:text-orange-500 transition-all ease-in-out">Cancel</button>
 
             <form class="flex flex-col" @submit.prevent="submitForm">
 
                 <div class="my-3 flex flex-col">
-                    <label for="username">Username</label>
-                    <input class="mt-2 p-2 rounded" type="text" name="username" v-model="username">
+                    <label for="password1">New Password</label>
+                    <input class="mt-2 p-2 rounded" type="text" name="password1" v-model="password1">
+                </div>
+
+                <div class="my-3 flex flex-col">
+                    <label for="password2">Confirm New Password</label>
+                    <input class="mt-2 p-2 rounded" type="text" name="password2" v-model="password2">
                 </div>
 
                 <button
@@ -38,7 +39,8 @@ type Data = {
     userId: null | string
     currentUser: null | UserDTO
     profile: null | ProfileResponse
-    username: null | string
+    password1: null | string
+    password2: null | string
     isSubmittingForm: boolean
 }
 
@@ -52,7 +54,8 @@ export default Vue.extend({
             userId: null,
             currentUser: null,
             profile: null,
-            username: null,
+            password1: null,
+            password2: null,
             isSubmittingForm: false
         }
     },
@@ -70,15 +73,15 @@ export default Vue.extend({
         },
         async submitForm() {
             this.isSubmittingForm = true;
-            await this.updateProfileData();
+            await this.updatePasword();
             this.$router.push(`/members/${this.userId}`);
         },
-        async updateProfileData() {
+        async updatePasword() {
             try {
-                const { data } = await axios.post(`/api/update-profile-by-userid`, {
+                const { data } = await axios.post(`/api/change-password-by-userid`, {
                     userId: this.userId,
                     accessToken: getAccessToken(),
-                    username: this.username
+                    password: this.password1
                 });
                 await this.getProfileByUserId();
                 await this.getCurrentUser();
@@ -95,11 +98,6 @@ export default Vue.extend({
             this.currentUser = {
                 ...currentUser.user_metadata,
                 id: currentUser.id
-            }
-        },
-        fillFormData() {
-            if (this.profile) {
-                this.username = this.profile.username;
             }
         },
         async cancelEdit() {

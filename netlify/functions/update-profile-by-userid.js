@@ -6,7 +6,15 @@ const { TB_SUPABASE_KEY: apiKey, TB_SUPABASE_URL: url } = process.env;
 export const handler = async (event) => {
 
     const { body } = event;
-    const { accessToken, username, userId } = JSON.parse(body)
+    const { accessToken, username, userId, password, email } = JSON.parse(body)
+
+    const updateUserData = { username };
+    if (password) {
+        updateUserData.password = password;
+    }
+    if (email) {
+        updateUserData.email = email;
+    }
 
     try {
 
@@ -14,9 +22,7 @@ export const handler = async (event) => {
             axios.put(
                 `${url}/auth/v1/user`,
                 {
-                    data: {
-                        username
-                    }
+                    data: updateUserData
                 },
                 {
                     headers: {

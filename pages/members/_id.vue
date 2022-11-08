@@ -2,8 +2,12 @@
     <div id="profile-page">
         <div v-if="profile" class="h-full">
             <h1>{{ profile.username }}</h1>
-            <button v-if="profile.id === currentUser?.id" @click="$router.push(`/members/edit/${userId}`)"
-                class="text-orange-400 hover:text-orange-500 transition-all ease-in-out">Edit</button>
+            <div v-if="profile.id === currentUser?.id">
+                <button @click="$router.push(`/members/edit/${userId}`)"
+                    class="text-orange-400 hover:text-orange-500 transition-all ease-in-out">Edit</button>
+                <button @click="$router.push(`/members/password/${currentUser?.id}`)"
+                    class="text-teal-400 hover:text-teal-500 transition-all ease-in-out">Change Password</button>
+            </div>
         </div>
         <FullLoader v-else />
     </div>
