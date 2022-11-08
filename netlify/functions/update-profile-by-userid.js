@@ -48,7 +48,7 @@ export const handler = async (event) => {
     } catch (error) {
         console.error(`Error #update-profile-by-userid`, error)
         return {
-            statusCode: 200,
+            statusCode: error.response?.status || 500,
             body: JSON.stringify(error),
         }
     }

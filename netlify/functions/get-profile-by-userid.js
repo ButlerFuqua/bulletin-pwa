@@ -28,7 +28,7 @@ export const handler = async (event) => {
     } catch (error) {
         console.error(`Error #get-profile-by-userid`, error)
         return {
-            statusCode: 200,
+            statusCode: error.response?.status || 500,
             body: JSON.stringify(error),
         }
     }

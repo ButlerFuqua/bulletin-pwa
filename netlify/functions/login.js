@@ -30,8 +30,11 @@ export const handler = async (event) => {
             body: JSON.stringify(testimonies),
         }
     } catch (error) {
-        console.error(`Error #get-testimonies`, error)
-        return { error }
+        console.error(`Error #login`, error)
+        return {
+            statusCode: error.response?.status || 500,
+            body: JSON.stringify(error),
+        }
     }
 
 }
