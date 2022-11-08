@@ -4,6 +4,8 @@
             <h1>Edit Testimony</h1>
             <button @click="cancelCreate"
                 class="text-orange-400 hover:text-orange-500 transition-all ease-in-out">Cancel</button>
+            <button @click="deleteTestimony"
+                class="text-gray-400 hover:text-gray-500 transition-all ease-in-out text-sm">Delete</button>
 
             <form class="flex flex-col" @submit.prevent="submitForm">
                 <div class="my-3 flex flex-col">
@@ -108,7 +110,20 @@ export default Vue.extend({
             if (confirm(`Are you sure you want to leave? Unsaved changes will be discarded.`)) {
                 this.$router.push(`/`);
             }
-        }
+        },
+        async deleteTestimony() {
+            if (confirm(`Are you sure you want to delete this? This cannot be undone.`)) {
+                try {
+                    await axios.post(`/api/delete-testimony-by-id`, {
+                        accessToken: getAccessToken(),
+                        testimonyId: this.testimonyId
+                    });
+                    this.$router.push(`/`);
+                } catch (error: any) {
+                    return error
+                }
+            }
+        },
     },
     async created() {
         await this.getCurrentUser();
