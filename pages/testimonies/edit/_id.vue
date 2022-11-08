@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="currentUser && !isSubmittingForm && testimony">
-            <h1>Add Testimony</h1>
+            <h1>Edit Testimony</h1>
             <button @click="cancelCreate"
                 class="text-orange-400 hover:text-orange-500 transition-all ease-in-out">Cancel</button>
 
@@ -33,8 +33,7 @@ import AuthMixin from '~/mixins/auth.vue'
 import { UserDTO, UserResponse } from '~/types/user';
 import { getAccessToken } from '~/utils/auth.utils';
 import FullLoader from '~/components/layout/fullLoader.vue'
-import { TestimonyDTO, TestimonyResponse } from '~/types/testimony';
-import test from 'node:test';
+import { TestimonyResponse } from '~/types/testimony';
 
 type Data = {
     currentUser: null | UserDTO
@@ -84,7 +83,7 @@ export default Vue.extend({
         },
         async updateTestimony() {
             try {
-                await axios.post(`/api/update-testimony`, {
+                await axios.post(`/api/update-testimony-by-id`, {
                     accessToken: getAccessToken(),
                     testimonyId: this.testimonyId,
                     body: this.body.trim(),
