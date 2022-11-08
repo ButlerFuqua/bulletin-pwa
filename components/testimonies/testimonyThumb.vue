@@ -8,6 +8,8 @@
             {{ testimony.body }}
         </div>
         <div>
+            <button @click="$router.push(`/testimonies/${testimony?.id}`)"
+                class="text-teal-500 hover:text-teal-400 transition-all ease">View</button>
             <button v-if="isCurrentUser" @click="$router.push(`/testimonies/edit/${testimony?.id}`)"
                 class="text-orange-400 hover:text-orange-300 transition-all ease">Edit</button>
         </div>

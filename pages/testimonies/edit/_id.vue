@@ -20,9 +20,9 @@
         </div>
         <FullLoader v-else-if="isSubmittingForm" />
         <div v-else>
-            <button @click="$router.push(`/`)"
+            <button @click="$router.push(`/testimonies/${this.testimonyId}`)"
                 class="text-blue-500 hover:text-blue-400 text-white transition-all ease-in-out">
-                Home
+                View Testimony
             </button>
         </div>
     </div>
@@ -33,7 +33,7 @@ import axios, { AxiosResponse } from 'axios';
 import Vue from 'vue';
 import AuthMixin from '~/mixins/auth.vue'
 import { UserDTO, UserResponse } from '~/types/user';
-import { getAccessToken } from '~/utils/auth.utils';
+import { clearLocalUserData, getAccessToken } from '~/utils/auth.utils';
 import FullLoader from '~/components/layout/fullLoader.vue'
 import { TestimonyResponse } from '~/types/testimony';
 
@@ -78,7 +78,7 @@ export default Vue.extend({
         async submitForm() {
             this.isSubmittingForm = true;
             if (!await this.updateTestimony()) {
-                return this.$router.push(`/`);
+                return this.$router.push(`/testimonies/${this.testimonyId}`);
             }
             this.isSubmittingForm = false;
         },
@@ -98,7 +98,8 @@ export default Vue.extend({
             // @ts-ignore
             const currentUser: UserResponse = await this.getUserDataIfLoggedIn();
             if ((currentUser as any).error) {
-                return this.$router.push(`/`);
+                clearLocalUserData();
+                return this.$router.push(`/testimonies/${this.testimonyId}`);
             }
             this.currentUser = {
                 ...currentUser.user_metadata,
@@ -107,7 +108,7 @@ export default Vue.extend({
         },
         async cancelCreate() {
             if (confirm(`Are you sure you want to leave? Unsaved changes will be discarded.`)) {
-                this.$router.push(`/`);
+                this.$router.push(`/testimonies/${this.testimonyId}`);
             }
         },
         async deleteTestimony() {
@@ -117,7 +118,7 @@ export default Vue.extend({
                         accessToken: getAccessToken(),
                         testimonyId: this.testimonyId
                     });
-                    this.$router.push(`/`);
+                    this.$router.push(`/testimonies/${this.testimonyId}`);
                 } catch (error: any) {
                     return error
                 }
@@ -125,8 +126,8 @@ export default Vue.extend({
         },
     },
     async created() {
-        await this.getCurrentUser();
         this.testimonyId = this.$route.params.id
+        await this.getCurrentUser();
         await this.getTestimony();
     }
 })
