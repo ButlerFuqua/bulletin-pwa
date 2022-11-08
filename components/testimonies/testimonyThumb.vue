@@ -1,13 +1,13 @@
 <template>
-    <div v-if="testimony" class="bg-white rounded p-2 my-3">
+    <div v-if="testimony" class="bg-white rounded p-3 my-3">
         <div class="testimony_author_info flex items-center my-3">
             <img :src="testimony.authorAvatarUrl" alt="avatar of testimony's author">
             <p class="ml-3">{{ testimony.authorUsername }}</p>
         </div>
-        <div class="testimony_thumb_body my-3">
-            <div>
-                {{ testimony.body }}
-            </div>
+        <div class="testimony_body">
+            {{ testimony.body }}
+        </div>
+        <div>
             <button v-if="isCurrentUser" class="text-orange-400 hover:text-orange-300 transition-all ease">Edit</button>
         </div>
     </div>
@@ -58,9 +58,8 @@ export default Vue.extend({
     }
 }
 
-.testimony_thumb_body {
-    & div {
-        padding-left: 50px;
-    }
+
+.testimony_body {
+    white-space: pre-line;
 }
 </style>

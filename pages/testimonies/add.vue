@@ -8,7 +8,7 @@
             <form class="flex flex-col" @submit.prevent="submitForm">
                 <div class="my-3 flex flex-col">
                     <label for="body">What happened?</label>
-                    <input class="mt-2 p-2 rounded" type="text" name="body" v-model="body">
+                    <textarea class="mt-2 p-2 rounded" type="text" name="body" v-model="body" />
                 </div>
                 <button
                     class="bg-blue-500 hover:bg-blue-400 rounded shadow text-white transition-all ease-in-out p-2 px-3">
@@ -58,7 +58,7 @@ export default Vue.extend({
             try {
                 await axios.post(`/api/create-testimony`, {
                     accessToken: getAccessToken(),
-                    body: this.body,
+                    body: this.body.trim(),
                     user: this.currentUser
                 });
             } catch (error: any) {
@@ -87,3 +87,7 @@ export default Vue.extend({
     }
 })
 </script>
+
+<style lang="scss" scoped>
+
+</style>
