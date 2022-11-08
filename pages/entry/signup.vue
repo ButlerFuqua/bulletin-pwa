@@ -1,9 +1,10 @@
 <template>
     <div>
         <h1>Signup</h1>
-        <div v-if="errorMessage" class="bg-red-400 p-3 rounded">
+        <!-- <div v-if="errorMessage" class="bg-red-400 p-3 rounded flex justify-between">
             <p>{{ errorMessage }}</p>
-        </div>
+            <button @click="errorMessage = null" class="font-black">x</button>
+        </div> -->
         <div v-if="!isSubmittingSignup">
             <form class="flex flex-col" @submit.prevent="submitSignup">
                 <input class="my-2 p-2 rounded" type="email" name="email" v-model="email" required>
@@ -28,7 +29,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import FullLoader from '../../components/layout/fullLoader.vue'
 import { returnStoragePrefix } from '~/utils/string.utils';
@@ -84,8 +85,12 @@ export default Vue.extend({
                 const { access_token, user } = userLoginResponse;
                 this.storeUserData(access_token, user);
             } catch (error: any) {
-                this.errorMessage = error.message;
-                console.error(error);
+                this.errorMessage = error.response?.data?.message || `Sorry... there was an error :(`;
+                console.error(error.response?.data?.error || error);
+                this.$nuxt.$emit('toast', {
+                    message: error.response?.data?.message || `Sorry... there was an error :(`,
+                    textColor: `text-red-500`
+                });
             }
         },
         storeUserData(accessToken: string, user: UserResponse) {

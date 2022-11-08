@@ -5,14 +5,15 @@
             <nuxt />
         </div>
         <BottomBar />
+        <Toaster />
     </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { UserResponse } from '~/types/user'
 import MainNav from '~/components/layout/mainNav.vue'
 import BottomBar from '~/components/layout/bottomBar.vue'
+import Toaster from '~/components/layout/toaster.vue';
 
 type Data = {
 
@@ -21,7 +22,7 @@ type Data = {
 export default Vue.extend({
     name: 'DefaultLayout',
     head: {},
-    components: { MainNav, BottomBar },
+    components: { MainNav, BottomBar, Toaster },
     data(): Data {
         return {
 

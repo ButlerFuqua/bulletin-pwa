@@ -38,7 +38,10 @@ export const handler = async (event) => {
         console.error(`Error #signup`, error)
         return {
             statusCode: error.response?.status || 500,
-            body: JSON.stringify(error),
+            body: JSON.stringify({
+                error,
+                message: error.response.data.msg
+            }),
         }
     }
 

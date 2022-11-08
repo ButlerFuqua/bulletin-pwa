@@ -19,3 +19,7 @@ export const setLocalUserData = (accessToken: string, user: UserDTO): void => {
     localStorage.setItem(`${storagePrefix}${accessTokenKey}`, accessToken);
     localStorage.setItem(`${storagePrefix}${userTokenKey}`, JSON.stringify(user));
 }
+
+export const getLocalUserData = (): UserDTO | null => {
+    return JSON.parse(localStorage.getItem(`${storagePrefix}${userTokenKey}`) || "null");
+}

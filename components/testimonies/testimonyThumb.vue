@@ -8,6 +8,7 @@
             <div>
                 {{ testimony.body }}
             </div>
+            <button v-if="isCurrentUser" class="text-orange-400 hover:text-orange-300 transition-all ease">Edit</button>
         </div>
     </div>
     <FullLoader v-else />
@@ -16,9 +17,14 @@
 <script lang="ts">
 import Vue from 'vue';
 import FullLoader from '~/components/layout/fullLoader.vue'
+import { TestimonyDTO } from '~/types/testimony';
+import { UserDTO } from '~/types/user';
+import { getLocalUserData } from '~/utils/auth.utils';
 
 type Data = {
-    testimony: any
+    testimony: null | TestimonyDTO
+    currentUser: null | UserDTO
+    isCurrentUser: boolean
 }
 
 export default Vue.extend({
@@ -27,11 +33,17 @@ export default Vue.extend({
     components: { FullLoader },
     data(): Data {
         return {
-            testimony: null
+            testimony: null,
+            currentUser: null,
+            isCurrentUser: false,
         }
     },
     created() {
         this.testimony = this.testimonyData;
+        this.currentUser = getLocalUserData();
+        if (this.currentUser) {
+            this.isCurrentUser = this.currentUser.id === this.testimony?.authorId
+        }
     }
 })
 </script>
