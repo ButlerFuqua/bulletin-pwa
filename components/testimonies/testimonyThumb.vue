@@ -8,7 +8,8 @@
             {{ testimony.body }}
         </div>
         <div>
-            <button v-if="isCurrentUser" class="text-orange-400 hover:text-orange-300 transition-all ease">Edit</button>
+            <button v-if="isCurrentUser" @click="$router.push(`/testimonies/edit/${testimony?.id}`)"
+                class="text-orange-400 hover:text-orange-300 transition-all ease">Edit</button>
         </div>
     </div>
     <FullLoader v-else />
