@@ -44,8 +44,8 @@ export default Vue.extend({
     },
     created() {
         this.$nuxt.$on('toast', (toast: ToastMessage) => {
-            console.log('TOAST', toast)
             this.toasts.push(toast);
+            setTimeout(() => this.removeToast(toast.message), 3000)
         })
     },
     beforeDestroy() {

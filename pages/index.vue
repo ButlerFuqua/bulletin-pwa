@@ -77,6 +77,14 @@ export default Vue.extend({
     this.orgSlug = process.env.orgSlug || null;
     this.orgLocation = process.env.orgLocation || null;
     await this.getTestimonies();
+
+    const { query } = this.$route
+    if (query.toast_message) {
+      this.$nuxt.$emit('toast', {
+        message: query.toast_message,
+        textColor: query.text_color || `text-teal-500`
+      });
+    }
   }
 })
 </script>

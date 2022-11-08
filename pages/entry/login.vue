@@ -1,9 +1,6 @@
 <template>
     <div>
         <h1>Login</h1>
-        <div v-if="errorMessage" class="bg-red-400 p-3 rounded">
-            <p>{{ errorMessage }}</p>
-        </div>
         <div v-if="!isSubmittingLogin">
             <form class="flex flex-col" @submit.prevent="submitLogin">
                 <input class="my-2 p-2 rounded" type="email" name="email" v-model="email" required>
@@ -38,7 +35,6 @@ import { userTokenKey } from '~/utils/user.utils';
 
 type Data = {
     isSubmittingLogin: boolean
-    errorMessage: string | null
     email: null | string
     password: null | string
 }
@@ -51,43 +47,20 @@ export default Vue.extend({
     data(): Data {
         return {
             isSubmittingLogin: false,
-            errorMessage: null,
             email: 'butlerfuqua+user1@gmail.com',
             password: 'password1',
         }
     },
     methods: {
-        async checkIfUserIsLoggedIn() {
-            // todo rethink and finish this
-            const accessToken = localStorage.getItem(`${returnStoragePrefix()}${accessTokenKey}`);
-            if (!accessToken)
-                return;
-            try {
-                const { data }: AxiosResponse<UserResponse | UnauthResponse> = await axios.post(`/api/user`, {
-                    accessToken,
-                });
-                // delete accessToken and return if it's expired
-                if ((data as any).status) {
-                    const { status } = data as UnauthResponse;
-                    if (status < 200 || status >= 300) {
-                        localStorage.removeItem(`${returnStoragePrefix()}${accessTokenKey}`);
-                        return;
-                    }
-                }
-                const { email, } = data as UserResponse
-            } catch (error: any) {
-                this.errorMessage = error.message;
-                console.error(error);
-            }
-        },
         async submitLogin() {
             this.isSubmittingLogin = true;
             await this.login();
-            if (this.errorMessage) {
-                this.isSubmittingLogin = false
-                return;
-            }
-            this.$router.push(`/`);
+            this.$router.push({
+                path: `/`,
+                query: {
+                    toast_message: `You will be logged in for one week`,
+                }
+            });
         },
         async login() {
             try {
@@ -98,8 +71,11 @@ export default Vue.extend({
                 const { access_token, user } = userLoginResponse;
                 this.storeUserData(access_token, user);
             } catch (error: any) {
-                this.errorMessage = error.message;
                 console.error(error);
+                this.$nuxt.$emit('toast', {
+                    message: error.response?.data?.message || `Sorry... there was an error :(`,
+                    textColor: `text-red-500`
+                });
             }
         },
         storeUserData(accessToken: string, user: UserResponse) {
@@ -113,7 +89,6 @@ export default Vue.extend({
         }
     },
     async created() {
-        // await this.checkIfUserIsLoggedIn();
     }
 })
 </script>
