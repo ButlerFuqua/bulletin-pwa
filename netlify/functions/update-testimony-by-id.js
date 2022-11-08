@@ -18,7 +18,8 @@ export const handler = async (event) => {
                 org_slug: user.org_slug,
                 org_location: user.org_location,
                 author_username: user.username,
-                author_avatar_url: user.avatar_url
+                author_avatar_url: user.avatar_url,
+                edited: true
             },
             {
                 headers: {

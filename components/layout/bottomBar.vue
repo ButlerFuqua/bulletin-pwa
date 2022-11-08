@@ -38,7 +38,6 @@ export default Vue.extend({
 
         //@ts-ignore
         const userData = await this.getUserDataIfLoggedIn();
-        console.log('userData', userData)
         if (userData.error) {
             this.user = null;
             return;

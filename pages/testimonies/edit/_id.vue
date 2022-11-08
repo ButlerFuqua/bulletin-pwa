@@ -61,7 +61,6 @@ export default Vue.extend({
     },
     methods: {
         async getTestimony() {
-            console.log('this.testimonyId', this.testimonyId)
             try {
                 const { data: testimony }: AxiosResponse<TestimonyResponse> = await axios.post('/api/get-testimony-by-id', {
                     testimonyId: this.testimonyId

@@ -68,7 +68,6 @@ export default Vue.extend({
                     email: this.email,
                     password: this.password
                 });
-                console.log('userLoginResponse', userLoginResponse)
                 const { access_token, user } = userLoginResponse;
                 this.storeUserData(access_token, user);
             } catch (error: any) {
