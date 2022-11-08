@@ -1,8 +1,15 @@
 <template>
   <div v-if="!errorMessage && !isLoading" id="main-testimonies-container" class="p-2">
-    <TestimonyThumb v-for="testimony in testimonies" :testimonyData="testimony" :key="testimony.id" />
+    <div v-if="testimonies?.length">
+      <TestimonyThumb v-for="testimony in testimonies" :testimonyData="testimony" :key="testimony.id" />
+    </div>
+    <div v-else class="p-2 bg-teal-600 text-white rounded text-center">
+      <p class="my-2">Be the first to write a testimony!</p>
+      <p>Click <span class="font-black">"Add Testimony"</span> below</p>
+    </div>
     <div class="flex justify-center">
-      <button v-if="testimonies" @click="getTestimonies(testimonies?.length, (testimonies?.length || 0) + 10)"
+      <button v-if="testimonies && testimonies?.length"
+        @click="getTestimonies(testimonies?.length, (testimonies?.length || 0) + 10)"
         class="bg-blue-500 hover:bg-blue-400 text-white transition-all ease-in-out py-1 px-2 rounded">
         Load More
       </button>

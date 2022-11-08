@@ -10,7 +10,7 @@ export const handler = async (event) => {
 
     try {
 
-        const { data: testimonies } = await axios.post(
+        const { data } = await axios.post(
             `${url}/auth/v1/signup`,
             {
                 email,
@@ -19,6 +19,7 @@ export const handler = async (event) => {
                     username,
                     org_slug: orgSlug,
                     org_location: orgLocation,
+                    avatar_url: "https://picsum.photos/200",
                 }
             },
             {
@@ -32,7 +33,7 @@ export const handler = async (event) => {
 
         return {
             statusCode: 200,
-            body: JSON.stringify(testimonies),
+            body: JSON.stringify(data),
         }
     } catch (error) {
         console.error(`Error #signup`, error)

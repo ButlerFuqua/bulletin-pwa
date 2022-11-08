@@ -13,6 +13,9 @@
                     Close
                 </button>
             </div>
+            <button @click="goToPage(`/`)" class="transition-all eas-in-out text-teal-500">
+                Home
+            </button>
             <div id="userInfo" class="text-white">
                 <div v-if="user" class="flex flex-col items-center justify-center">
                     <p class="my-2">Logged in as <span class="text-yellow-400">{{ user.username }}</span></p>
