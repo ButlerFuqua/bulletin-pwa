@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div v-if="profile && currentUser && !isSubmittingForm">
-            <h1>{{ profile.username }}</h1>
-            <button v-if="profile.id === currentUser?.id" @click="cancelEdit"
+        <div v-if="currentUser && !isSubmittingForm">
+            <h1>{{ currentUser.username }}</h1>
+            <button @click="cancelEdit"
                 class="text-orange-400 hover:text-orange-500 transition-all ease-in-out">Cancel</button>
 
             <form class="flex flex-col" @submit.prevent="submitForm">
@@ -38,7 +38,6 @@ import FullLoader from '~/components/layout/fullLoader.vue'
 type Data = {
     userId: null | string
     currentUser: null | UserDTO
-    profile: null | ProfileResponse
     password1: null | string
     password2: null | string
     isSubmittingForm: boolean
@@ -53,24 +52,12 @@ export default Vue.extend({
         return {
             userId: null,
             currentUser: null,
-            profile: null,
             password1: null,
             password2: null,
             isSubmittingForm: false
         }
     },
     methods: {
-        async getProfileByUserId() {
-            try {
-                const { data: profileResponse }: AxiosResponse<ProfileResponse> = await axios.post(`/api/get-profile-by-userid`, {
-                    userId: this.userId,
-                    accessToken: getAccessToken()
-                });
-                this.profile = profileResponse;
-            } catch (error: any) {
-                console.error(error);
-            }
-        },
         async submitForm() {
             if (this.password1?.trim() !== this.password2?.trim()) {
                 return this.$nuxt.$emit(`toast`, {
@@ -80,7 +67,7 @@ export default Vue.extend({
             }
             this.isSubmittingForm = true;
             const response = await this.updatePassword();
-            if ((response as any).error) {
+            if ((response as any)?.error) {
                 this.isSubmittingForm = false;
                 return this.$nuxt.$emit(`toast`, {
                     message: response?.error.message || `Error updating`,
@@ -90,24 +77,25 @@ export default Vue.extend({
             this.$router.push(`/members/${this.userId}`);
         },
         async updatePassword() {
-
             try {
-                await axios.post(`/api/change-password-by-userid`, {
+                await axios.post(`/api/update-password-by-userid`, {
                     userId: this.userId,
                     accessToken: getAccessToken(),
                     password: this.password1?.trim()
                 });
-                await this.getProfileByUserId();
                 await this.getCurrentUser();
             } catch (error: any) {
-                console.error(error.message || error.response?.data);
-                return { error }
+                return {
+                    error: {
+                        message: error.response?.data?.error
+                    }
+                }
             }
         },
         async getCurrentUser() {
             // @ts-ignore
             const currentUser: UserResponse = await this.getUserDataIfLoggedIn();
-            if ((currentUser as any).error || currentUser.id !== this.profile?.id) {
+            if ((currentUser as any).error || currentUser.id !== this.userId) {
                 return this.$router.push(`/members/${this.userId}`);
             }
             this.currentUser = {
@@ -121,7 +109,6 @@ export default Vue.extend({
     },
     async created() {
         this.userId = this.$route.params.id || null;
-        await this.getProfileByUserId();
         await this.getCurrentUser();
     }
 })

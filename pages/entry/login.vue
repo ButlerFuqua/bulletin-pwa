@@ -4,12 +4,16 @@
         <div v-if="!isSubmittingLogin">
             <form class="flex flex-col" @submit.prevent="submitLogin">
                 <input class="my-2 p-2 rounded" type="email" name="email" v-model="email" required>
-                <input class="my-2 p-2 rounded" type="password" name="password" v-model="password" required>
+                <input class="my-2 p-2 rounded" :type="!showPassword ? 'password' : 'text'" name="password"
+                    v-model="password" required>
                 <button
                     class="bg-blue-500 hover:bg-blue-400 rounded shadow text-white transition-all ease-in-out p-2 px-3">
                     Login
                 </button>
             </form>
+            <button @click="showPassword = !showPassword" class="text-teal-400 my-5">
+                {{ !showPassword ? 'Show Password' : 'Hide Password' }}
+            </button>
             <div class="my-3 flex flex-col">
                 <NuxtLink
                     class="bg-yellow-400 hover:bg-yellow-300 transition-all ease-in-out rounded p-2 px-3 text-center"
@@ -37,6 +41,7 @@ type Data = {
     isSubmittingLogin: boolean
     email: null | string
     password: null | string
+    showPassword: boolean
 }
 
 
@@ -46,6 +51,7 @@ export default Vue.extend({
     components: { FullLoader },
     data(): Data {
         return {
+            showPassword: false,
             isSubmittingLogin: false,
             email: 'butlerfuqua+user1@gmail.com',
             password: 'password1',
@@ -54,7 +60,14 @@ export default Vue.extend({
     methods: {
         async submitLogin() {
             this.isSubmittingLogin = true;
-            await this.login();
+            const response = await this.login();
+            if ((response as any)?.error) {
+                this.isSubmittingLogin = false;
+                return this.$nuxt.$emit(`toast`, {
+                    message: response?.error.message || `Error logging in`,
+                    textColor: `text-red-500`
+                });
+            }
             this.$router.push({
                 path: `/`,
                 query: {
@@ -71,11 +84,11 @@ export default Vue.extend({
                 const { access_token, user } = userLoginResponse;
                 this.storeUserData(access_token, user);
             } catch (error: any) {
-                console.error(error);
-                this.$nuxt.$emit('toast', {
-                    message: error.response?.data?.message || `Sorry... there was an error :(`,
-                    textColor: `text-red-500`
-                });
+                return {
+                    error: {
+                        message: error.response?.data?.error
+                    }
+                }
             }
         },
         storeUserData(accessToken: string, user: UserResponse) {

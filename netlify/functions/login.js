@@ -10,7 +10,7 @@ export const handler = async (event) => {
 
     try {
 
-        const { data: testimonies } = await axios.post(
+        const { data: userData } = await axios.post(
             `${url}/auth/v1/token?grant_type=password`,
             {
                 email,
@@ -27,13 +27,15 @@ export const handler = async (event) => {
 
         return {
             statusCode: 200,
-            body: JSON.stringify(testimonies),
+            body: JSON.stringify(userData),
         }
     } catch (error) {
         console.error(`Error #login`, error)
+        const statusCode = error.response?.status || 500;
+        const message = error.response?.data?.error_description || error.message || `Error updating password`
         return {
-            statusCode: error.response?.status || 500,
-            body: JSON.stringify(error),
+            statusCode,
+            body: JSON.stringify({ error: message }),
         }
     }
 
