@@ -25,6 +25,24 @@ export const handler = async (event) => {
             }
         );
 
+        try {
+            axios.patch(
+                `${url}/rest/v1/profiles?id=eq.${userData.user.id}`,
+                {
+                    delete: false
+                },
+                {
+                    headers: {
+                        apiKey,
+                        Authorization: `Bearer ${userData.access_token}`,
+                        ['Content-Type']: 'application/json'
+                    },
+                }
+            )
+        } catch (error) {
+            console.error(error)
+        }
+
         return {
             statusCode: 200,
             body: JSON.stringify(userData),

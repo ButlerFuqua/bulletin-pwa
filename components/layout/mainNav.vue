@@ -13,11 +13,16 @@
                     Close
                 </button>
             </div>
-            <button @click="goToPage(`/`)" class="transition-all eas-in-out text-teal-500">
-                Testimonies
-            </button>
+            <div class="flex flex-col items-center">
+                <button @click="goToPage(`/`)" class="transition-all eas-in-out text-teal-500">
+                    Testimonies
+                </button>
+            </div>
             <div id="userInfo" class="text-white">
                 <div v-if="user" class="flex flex-col items-center justify-center">
+                    <button @click="goToPage(`/settings`)" class="transition-all eas-in-out text-teal-500">
+                        Settings
+                    </button>
                     <p class="my-2">Logged in as <span class="text-yellow-400">{{ user.username }}</span></p>
                     <button @click="goToPage(`/members/${user?.id}`)"
                         class="bg-blue-500 hover:bg-blue-400 transition-all eas-in-out text-white py-1 px-2 rounded shadow">
@@ -91,6 +96,12 @@ export default Vue.extend({
         }
     },
     async created() {
+
+        this.$nuxt.$on('clear_local_user', () => {
+            this.user = null;
+            clearLocalUserData();
+        })
+
         // @ts-ignore
         const userData = await this.getUserDataIfLoggedIn();
         if (!userData.error) {
@@ -101,7 +112,10 @@ export default Vue.extend({
         } else {
             clearLocalUserData();
         }
-    }
+    },
+    beforeDestroy() {
+        this.$nuxt.$off("clear_local_user");
+    },
 })
 </script>
 
