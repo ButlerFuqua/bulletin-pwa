@@ -18,7 +18,7 @@ export const handler = async (event) => {
 
     try {
 
-        await Promise.all(
+        await Promise.all([
             axios.put(
                 `${url}/auth/v1/user`,
                 {
@@ -46,7 +46,7 @@ export const handler = async (event) => {
                 }
             )
 
-        );
+        ]);
 
         return {
             statusCode: 204
