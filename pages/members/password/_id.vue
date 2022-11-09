@@ -9,12 +9,14 @@
 
                 <div class="my-3 flex flex-col">
                     <label for="password1">New Password</label>
-                    <input class="mt-2 p-2 rounded" type="text" name="password1" v-model="password1">
+                    <input class="mt-2 p-2 rounded" :type="!showPassword ? 'password' : 'text'" name="password1"
+                        v-model="password1">
                 </div>
 
                 <div class="my-3 flex flex-col">
                     <label for="password2">Confirm New Password</label>
-                    <input class="mt-2 p-2 rounded" type="text" name="password2" v-model="password2">
+                    <input class="mt-2 p-2 rounded" :type="!showPassword ? 'password' : 'text'" name="password2"
+                        v-model="password2">
                 </div>
 
                 <button
@@ -22,6 +24,9 @@
                     Submit
                 </button>
             </form>
+            <button @click="showPassword = !showPassword" class="text-teal-400 my-5">
+                {{ !showPassword ? 'Show Password' : 'Hide Password' }}
+            </button>
         </div>
         <FullLoader v-else />
     </div>
@@ -41,6 +46,7 @@ type Data = {
     password1: null | string
     password2: null | string
     isSubmittingForm: boolean
+    showPassword: boolean
 }
 
 export default Vue.extend({
@@ -54,7 +60,8 @@ export default Vue.extend({
             currentUser: null,
             password1: null,
             password2: null,
-            isSubmittingForm: false
+            isSubmittingForm: false,
+            showPassword: false,
         }
     },
     methods: {
