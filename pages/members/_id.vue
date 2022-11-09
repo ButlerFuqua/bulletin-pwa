@@ -55,7 +55,13 @@ export default Vue.extend({
             // @ts-ignore
             const currentUser: UserResponse = await this.getUserDataIfLoggedIn();
             if ((currentUser as any).error) {
-                return
+                return this.$router.push({
+                    path: `/`,
+                    query: {
+                        toast_message: `Must be logged in to view members.`,
+                        text_color: `text-red-500`
+                    }
+                });
             }
             this.currentUser = {
                 ...currentUser.user_metadata,

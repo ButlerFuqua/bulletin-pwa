@@ -20,6 +20,9 @@
             </div>
             <div id="userInfo" class="text-white">
                 <div v-if="user" class="flex flex-col items-center justify-center">
+                    <button @click="goToPage(`/members`)" class="transition-all eas-in-out text-teal-500">
+                        Members
+                    </button>
                     <button @click="goToPage(`/settings`)" class="transition-all eas-in-out text-teal-500">
                         Settings
                     </button>
