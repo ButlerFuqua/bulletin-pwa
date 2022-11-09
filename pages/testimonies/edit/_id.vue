@@ -6,7 +6,6 @@
                 class="text-orange-400 hover:text-orange-500 transition-all ease-in-out">Cancel</button>
             <button @click="deleteTestimony"
                 class="text-gray-400 hover:text-gray-500 transition-all ease-in-out text-sm">Delete</button>
-
             <form class="flex flex-col" @submit.prevent="submitForm">
                 <div class="my-3 flex flex-col">
                     <label for="body">What happened?</label>
@@ -118,7 +117,7 @@ export default Vue.extend({
                         accessToken: getAccessToken(),
                         testimonyId: this.testimonyId
                     });
-                    this.$router.push(`/testimonies/${this.testimonyId}`);
+                    this.$router.push(`/`);
                 } catch (error: any) {
                     return error
                 }

@@ -14,7 +14,7 @@
                 </button>
             </div>
             <button @click="goToPage(`/`)" class="transition-all eas-in-out text-teal-500">
-                Home
+                Testimonies
             </button>
             <div id="userInfo" class="text-white">
                 <div v-if="user" class="flex flex-col items-center justify-center">
@@ -98,6 +98,8 @@ export default Vue.extend({
                 ...(userData as UserResponse).user_metadata,
                 id: userData.id
             };
+        } else {
+            clearLocalUserData();
         }
     }
 })

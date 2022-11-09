@@ -51,14 +51,17 @@ export default Vue.extend({
                     email,
                     password
                 });
-                const { access_token, user } = userLoginResponse;
+                const { access_token } = userLoginResponse;
                 return {
                     accessToken: access_token,
                     user: userLoginResponse
                 }
             } catch (error: any) {
-                console.error(error);
-                return error;
+                return {
+                    error: {
+                        message: error.message || `Error logging in.`
+                    }
+                };
             }
         },
         storeUserData(accessToken: string, user: UserResponse) {
@@ -69,7 +72,7 @@ export default Vue.extend({
                 email: user.email,
                 ...user.user_metadata
             }));
-        }
+        },
     },
     async created() {
         // await this.checkIfUserIsLoggedIn();

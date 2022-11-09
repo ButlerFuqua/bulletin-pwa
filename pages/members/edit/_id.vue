@@ -8,14 +8,11 @@
                 <button @click="$router.push(`/members/password/${currentUser?.id}`)"
                     class="text-teal-400 hover:text-teal-500 transition-all ease-in-out">Change Password</button>
             </div>
-
             <form class="flex flex-col" @submit.prevent="submitForm">
-
                 <div class="my-3 flex flex-col">
                     <label for="username">Username</label>
                     <input class="mt-2 p-2 rounded" type="text" name="username" v-model="username">
                 </div>
-
                 <button
                     class="bg-blue-500 hover:bg-blue-400 rounded shadow text-white transition-all ease-in-out p-2 px-3">
                     Submit
