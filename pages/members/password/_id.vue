@@ -72,21 +72,36 @@ export default Vue.extend({
             }
         },
         async submitForm() {
+            if (this.password1?.trim() !== this.password2?.trim()) {
+                return this.$nuxt.$emit(`toast`, {
+                    message: `Passwords do not match`,
+                    textColor: `text-red-500`
+                });
+            }
             this.isSubmittingForm = true;
-            await this.updatePasword();
+            const response = await this.updatePassword();
+            if ((response as any).error) {
+                this.isSubmittingForm = false;
+                return this.$nuxt.$emit(`toast`, {
+                    message: response?.error.message || `Error updating`,
+                    textColor: `text-red-500`
+                });
+            }
             this.$router.push(`/members/${this.userId}`);
         },
-        async updatePasword() {
+        async updatePassword() {
+
             try {
-                const { data } = await axios.post(`/api/change-password-by-userid`, {
+                await axios.post(`/api/change-password-by-userid`, {
                     userId: this.userId,
                     accessToken: getAccessToken(),
-                    password: this.password1
+                    password: this.password1?.trim()
                 });
                 await this.getProfileByUserId();
                 await this.getCurrentUser();
             } catch (error: any) {
-                console.error(error);
+                console.error(error.message || error.response?.data);
+                return { error }
             }
         },
         async getCurrentUser() {
@@ -101,9 +116,7 @@ export default Vue.extend({
             }
         },
         async cancelEdit() {
-            if (confirm(`Are you sure you want to leave? Unsaved changes will be discarded.`)) {
-                this.$router.push(`/members/${this.userId}`);
-            }
+            this.$router.push(`/members/${this.userId}`);
         }
     },
     async created() {
