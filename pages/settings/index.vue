@@ -1,7 +1,11 @@
 <template>
-    <div>
+    <div class="flex flex-col">
+        <button @click="$router.push(`/members/edit/${currentUser?.id}`)"
+            class="transition-all eas-in-out text-teal-500 my-3">
+            Edit Profile
+        </button>
         <button @click="$router.push(`/settings/delete-account/${currentUser?.id}`)"
-            class="transition-all eas-in-out text-teal-500">
+            class="transition-all eas-in-out text-teal-500 my-3">
             Delete Account <small>(<em>don't do it!</em>)</small>
         </button>
     </div>
