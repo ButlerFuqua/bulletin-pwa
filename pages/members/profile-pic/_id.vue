@@ -8,10 +8,12 @@
                 <button @click="$router.push(`/members/password/${currentUser?.id}`)"
                     class="text-teal-400 hover:text-teal-500 transition-all ease-in-out">Change Password</button>
             </div>
+            <h2>Current Profile Pic</h2>
+            <img :src="currentUser.avatar_url" alt="Current profile pic">
             <form class="flex flex-col" @submit.prevent="submitForm">
                 <div class="my-3 flex flex-col">
-                    <label for="username">Username</label>
-                    <input class="mt-2 p-2 rounded" type="text" name="username" v-model="username">
+                    <label for="avatar">Upload New Image</label>
+                    <input @change="setAvatarFile" class="mt-2" type="file" name="avatar">
                 </div>
                 <button
                     class="bg-blue-500 hover:bg-blue-400 rounded shadow text-white transition-all ease-in-out p-2 px-3">
@@ -35,12 +37,12 @@ type Data = {
     userId: null | string
     currentUser: null | UserDTO
     profile: null | ProfileResponse
-    username: null | string
+    avatarFile: null | File
     isSubmittingForm: boolean
 }
 
 export default Vue.extend({
-    name: 'EditProfilePage',
+    name: 'EditProfilePicPage',
     layout: 'form',
     mixins: [AuthMixin],
     components: { FullLoader },
@@ -49,7 +51,7 @@ export default Vue.extend({
             userId: null,
             currentUser: null,
             profile: null,
-            username: null,
+            avatarFile: null,
             isSubmittingForm: false
         }
     },
@@ -65,10 +67,16 @@ export default Vue.extend({
                 console.error(error);
             }
         },
+        setAvatarFile(event: any) {
+            console.log(event.target.files[0])
+        },
         async submitForm() {
-            this.isSubmittingForm = true;
-            await this.updateProfileData();
-            this.$router.push(`/members/${this.userId}`);
+
+            console.log(this.avatarFile)
+
+            // this.isSubmittingForm = true;
+            // await this.updateProfileData();
+            // this.$router.push(`/members/${this.userId}`);
         },
         async updateProfileData() {
             try {
@@ -92,11 +100,6 @@ export default Vue.extend({
             this.currentUser = {
                 ...currentUser.user_metadata,
                 id: currentUser.id
-            }
-        },
-        fillFormData() {
-            if (this.profile) {
-                this.username = this.profile.username;
             }
         },
         async cancelEdit() {
